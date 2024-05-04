@@ -8,6 +8,7 @@ fi
 DEFAULT_PRIMARY_PORT=9993
 DEFAULT_PORT_MAPPING_ENABLED=true
 DEFAULT_ALLOW_TCP_FALLBACK_RELAY=true
+DEFUALT_RUN_NGINX=true
 
 MANAGEMENT_NETWORKS=""
 if [ ! -z "$ZT_ALLOW_MANAGEMENT_FROM" ]; then
@@ -29,6 +30,11 @@ if [ "$ZT_OVERRIDE_LOCAL_CONF" = 'true' ] || [ ! -f "/var/lib/zerotier-one/local
         \"allowTcpFallbackRelay\": ${ZT_ALLOW_TCP_FALLBACK_RELAY:-$DEFAULT_ALLOW_TCP_FALLBACK_RELAY}
     }
   }" > /var/lib/zerotier-one/local.conf
+fi
+
+if [ "${ZT_RUN_NGINX:-$DEFUALT_RUN_NGINX}" = 'true' ]; then
+  nginx -g 'daemon on;'
+  echo "nginx started"
 fi
 
 exec "$@"

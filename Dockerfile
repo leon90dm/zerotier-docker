@@ -10,6 +10,9 @@ ARG ZT_COMMIT
 COPY patches /patches
 COPY scripts /scripts
 
+# Copy or define any additional configuration files for Nginx
+# COPY nginx.conf /etc/nginx/nginx.conf
+
 RUN apk add --update alpine-sdk linux-headers openssl-dev \
   && git clone --quiet https://github.com/zerotier/ZeroTierOne.git /src \
   && git -C src reset --quiet --hard ${ZT_COMMIT} \
@@ -35,7 +38,14 @@ RUN apk add --no-cache --purge --clean-protected libc6-compat libstdc++ \
   && ln -s /usr/sbin/zerotier-one /usr/sbin/zerotier-cli \
   && rm -rf /var/cache/apk/*
 
+# Install Nginx  
+RUN apk add --no-cache nginx
+
+COPY ./nginx.conf /etc/nginx/nginx.conf
+
 EXPOSE 9993/udp
+# Expose the port Nginx is listening on
+EXPOSE 8080 8443
 
 ENTRYPOINT ["entrypoint.sh"]
 
