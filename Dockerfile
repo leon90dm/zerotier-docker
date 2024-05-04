@@ -45,7 +45,7 @@ COPY ./nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 9993/udp
 # Expose the port Nginx is listening on
-EXPOSE 8080 8443
+EXPOSE 80 443
 
 ENTRYPOINT ["entrypoint.sh"]
 
