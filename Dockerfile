@@ -38,8 +38,12 @@ RUN apk add --no-cache --purge --clean-protected libc6-compat libstdc++ \
   && ln -s /usr/sbin/zerotier-one /usr/sbin/zerotier-cli \
   && rm -rf /var/cache/apk/*
 
-# Install Nginx  
-RUN apk add --no-cache nginx
+# Install Nginx with SSL module
+RUN apk add --no-cache --update \
+      nginx \
+      openssl \
+      tzdata
+RUN apk --no-cache add ca-certificates && update-ca-certificates
 
 COPY ./nginx.conf /etc/nginx/nginx.conf
 
